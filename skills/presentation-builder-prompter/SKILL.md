@@ -1,6 +1,6 @@
 ---
 name: presentation-builder-prompter
-description: Создает интерактивные single-file HTML-презентации через DeckSpec-first pipeline: brief, claim spine, роли слайдов, content blocks, layout contracts, Master Prompt artifact, HTML deck, QA gates и preview. Master Prompt сохраняется как промежуточный артефакт для воспроизводимости. По умолчанию финальный результат — готовая презентация, если пользователь не запросил prompt-only режим.
+description: "Создает интерактивные single-file HTML-презентации через DeckSpec-first pipeline: brief, claim spine, роли слайдов, content blocks, layout contracts, Master Prompt artifact, HTML deck, QA gates и preview. Master Prompt сохраняется как промежуточный артефакт для воспроизводимости. По умолчанию финальный результат — готовая презентация, если пользователь не запросил prompt-only режим."
 ---
 
 # Presentation Builder Prompter

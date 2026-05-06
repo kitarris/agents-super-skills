@@ -26,7 +26,7 @@ This protocol turns the former prompt-only workflow into a production workflow. 
 Use a short lowercase slug derived from the topic. Save artifacts under the skill tmp output directory unless the user gives another destination:
 
 ```text
-OUTPUT_DIR=~/.openclaw/workspace/.tmp/presentation-builder-prompter
+OUTPUT_DIR=.tmp/presentation-builder-prompter
 ```
 
 ```text
@@ -37,6 +37,8 @@ ${OUTPUT_DIR}/{slug}-qa-report.json or ${OUTPUT_DIR}/{slug}-qa-report.md
 ${OUTPUT_DIR}/{slug}-preview/
 ${OUTPUT_DIR}/{slug}-manifest.json
 ```
+
+`OUTPUT_DIR` трактуется относительно `workspace root`.
 
 The manifest should be small and machine-readable:
 

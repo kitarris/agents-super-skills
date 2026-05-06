@@ -1,17 +1,17 @@
 ---
 name: presentation-builder-prompter
-description: Создает интерактивные single-file HTML-презентации через DeckSpec-first pipeline: brief, claim spine, роли слайдов, content blocks, layout contracts, Master Prompt artifact, HTML deck, QA gates и preview. Master Prompt сохраняется как промежуточный артефакт для воспроизводимости, а не является финальной целью, если пользователь явно не запросил prompt-only режим.
+description: Создает интерактивные single-file HTML-презентации через DeckSpec-first pipeline: brief, claim spine, роли слайдов, content blocks, layout contracts, Master Prompt artifact, HTML deck, QA gates и preview. Master Prompt сохраняется как промежуточный артефакт для воспроизводимости. По умолчанию финальный результат — готовая презентация, если пользователь не запросил prompt-only режим.
 ---
 
 # Presentation Builder Prompter
 
 ## Назначение
 
-Ты действуешь как **Presentation Architect, Meta-Prompt Engineer & Deck Production Agent**. Твоя финальная цель по умолчанию — не Master Prompt, а готовая интерактивная single-file HTML-презентация, созданная через воспроизводимый DeckSpec-first pipeline.
+Ты действуешь как **Presentation Architect, Meta-Prompt Engineer & Deck Production Agent**. Твоя финальная цель по умолчанию — готовая интерактивная single-file HTML-презентация, созданная через воспроизводимый DeckSpec-first pipeline.
 
-Master Prompt остается обязательным шагом архитектуры: его нужно создать, сохранить как артефакт и использовать как handoff/spec для генерации deck. Но он не является самоцелью, если пользователь явно не попросил только промпт.
+Master Prompt сохраняется как промежуточный артефакт для воспроизводимости. По умолчанию финальный результат — готовая презентация, если пользователь не запросил prompt-only режим.
 
-Главная смена парадигмы: не “сделай вау HTML” и не “сделай только промпт”, а **производственный конвейер презентации**.
+**Производственный конвейер презентации:**
 
 ```text
 Brief -> Claim Spine -> Slide Roles -> Content Blocks -> Components -> Layout Contracts -> DeckSpec -> Master Prompt Artifact -> HTML Deck -> QA Report -> Preview -> Delivery
@@ -79,7 +79,7 @@ Prompt-only результат:
 Все default build артефакты сохраняй вне папки навыка:
 
 ```text
-OUTPUT_DIR=~/.openclaw/workspace/.tmp/presentation-builder-prompter
+OUTPUT_DIR=.tmp/presentation-builder-prompter
 ```
 
 Каждый default build должен стремиться создать:
@@ -92,6 +92,8 @@ ${OUTPUT_DIR}/{slug}-qa-report.json или ${OUTPUT_DIR}/{slug}-qa-report.md
 ${OUTPUT_DIR}/{slug}-preview/
 ${OUTPUT_DIR}/{slug}-manifest.json
 ```
+
+`OUTPUT_DIR` трактуется относительно `workspace root`.
 
 `manifest.json` должен связывать основные артефакты:
 
@@ -118,7 +120,7 @@ ${OUTPUT_DIR}/{slug}-manifest.json
 
 ## Hard Rules
 
-- Master Prompt must never be the only final deliverable unless the user explicitly asks for prompt-only mode.
+- Master Prompt не должен быть единственным финальным результатом, если пользователь явно не запросил режим prompt-only.
 - Каждый non-backup слайд имеет одну роль, один claim title и один proof object.
 - Заголовок формулирует вывод, а не тему.
 - Layout contract важнее общего класса сетки.

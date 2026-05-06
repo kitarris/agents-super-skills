@@ -10,7 +10,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 REFS = ROOT / "references"
-OUTPUT_DIR = Path.home() / ".openclaw" / "workspace" / ".tmp" / "presentation-builder-prompter"
+WORKSPACE_ROOT = ROOT.parents[1]
+OUTPUT_DIR_TOKEN = Path(".tmp") / "presentation-builder-prompter"
+OUTPUT_DIR = WORKSPACE_ROOT / OUTPUT_DIR_TOKEN
 DEFAULT_SLOT_MAP = {
     "title": "title_slot",
     "support": "support_slot",
@@ -28,7 +30,7 @@ DEFAULT_BRIEF = {
     "must_include": [],
     "sources": [],
     "constraints": [],
-    "output_dir": str(OUTPUT_DIR),
+    "output_dir": str(OUTPUT_DIR_TOKEN),
     "control_policy": "keyboard-only",
 }
 
@@ -95,7 +97,7 @@ def make_seed_deck_spec(brief: dict) -> dict:
     return {
         "deck_title": topic,
         "audience": audience,
-        "output_dir": brief.get("output_dir", str(OUTPUT_DIR)),
+        "output_dir": brief.get("output_dir", str(OUTPUT_DIR_TOKEN)),
         "control_policy": brief.get("control_policy", "keyboard-only"),
         "geometry_policy": {
             "frame_contract": "fixed-stage-frame",

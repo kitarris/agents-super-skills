@@ -38,7 +38,7 @@ Use this template to create the saved Master Prompt artifact:
 Используй output directory навыка:
 
 ```text
-OUTPUT_DIR=~/.openclaw/workspace/.tmp/presentation-builder-prompter
+OUTPUT_DIR=.tmp/presentation-builder-prompter
 ```
 
 Создай или обнови:

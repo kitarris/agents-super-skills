@@ -37,7 +37,7 @@ Use these defaults when the user gives only a topic:
 - Interaction: minimal and meaning-led.
 - Sources: required for medical, financial, legal, scientific, or quantitative claims.
 - Accessibility: keyboard navigation, reduced motion, visible focus.
-- Output directory: `~/.openclaw/workspace/.tmp/presentation-builder-prompter`.
+- Output directory: `.tmp/presentation-builder-prompter` (relative to workspace root).
 
 ## Prompt-Only Exception
 

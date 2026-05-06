@@ -10,6 +10,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+WORKSPACE_ROOT = ROOT.parents[1]
 
 
 TOPIC_TITLE_PATTERNS = [
@@ -48,9 +49,10 @@ def validate(spec: dict) -> list[dict]:
     slides = spec.get("slides", [])
     output_dir = spec.get("output_dir")
     if not output_dir:
-        findings.append({"level": "warning", "path": "output_dir", "message": "Missing output_dir; generated artifacts should go under ~/.openclaw/workspace/.tmp/<skill-name>"})
+        findings.append({"level": "warning", "path": "output_dir", "message": "Missing output_dir; generated artifacts should go under .tmp/<skill-name> relative to workspace root"})
     else:
-        resolved_output = Path(output_dir).expanduser().resolve()
+        raw_output = Path(output_dir).expanduser()
+        resolved_output = raw_output.resolve() if raw_output.is_absolute() else (WORKSPACE_ROOT / raw_output).resolve()
         relative = Path()
         try:
             relative = resolved_output.relative_to(ROOT)

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "layout-contract.schema.json",
+  "title": "LayoutContract",
+  "type": "object",
+  "required": ["name", "areas", "desktop_behavior", "mobile_behavior"],
+  "properties": {
+    "name": { "type": "string" },
+    "areas": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "support": { "type": "string" },
+        "visual": { "type": "string" },
+        "source": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "alignment_target": { "type": "string" },
+    "desktop_behavior": { "type": "string" },
+    "mobile_behavior": { "type": "string" },
+    "min_spacing_px": {
+      "type": "object",
+      "properties": {
+        "title_to_support": { "type": "number", "minimum": 0 },
+        "support_to_visual": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "frame_contract": {
+      "type": "object",
+      "description": "Shared deck frame geometry that prevents slide-to-slide jumping.",
+      "properties": {
+        "stage": { "type": "string" },
+        "title_slot": { "type": "string" },
+        "support_slot": { "type": "string" },
+        "content_zone": { "type": "string" },
+        "safe_area": { "type": "string" },
+        "bottom_reserve": { "type": "string" },
+        "coordinate_delta_tolerance_px": { "type": "number", "minimum": 0, "default": 0 }
+      },
+      "additionalProperties": true
+    },
+    "forbidden": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

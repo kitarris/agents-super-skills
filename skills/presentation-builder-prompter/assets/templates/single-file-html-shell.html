@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{DECK_TITLE}}</title>
+  <style>
+    /* stylelint-disable */
+    {{DECK_CSS_SYSTEM}}
+    /* stylelint-enable */
+  </style>
+</head>
+<body>
+  <noscript>
+    <div class="noscript">Для интерактивной версии включите JavaScript. Основная мысль: {{CORE_PROMISE}}</div>
+  </noscript>
+
+  <main class="deck" aria-live="polite">
+    <div class="counter" id="counter">01 / {{SLIDE_COUNT}}</div>
+    <section class="slides" id="slides">
+      {{SLIDES}}
+    </section>
+    <nav class="controls" aria-label="Навигация презентации">
+      <button type="button" class="nav-button" id="prev" aria-label="Предыдущий слайд">‹</button>
+      <button type="button" class="nav-button" id="next" aria-label="Следующий слайд">›</button>
+      <button type="button" class="nav-button" id="overview-open" aria-label="Обзор слайдов">▦</button>
+      <button type="button" class="nav-button" id="help-open" aria-label="Горячие клавиши">?</button>
+    </nav>
+    <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+  </main>
+
+  <div class="overlay" id="help" role="dialog" aria-modal="true" aria-label="Горячие клавиши">
+    <div class="panel">
+      <h3>Горячие клавиши</h3>
+      <div class="hotkeys">
+        <div class="hotkey"><span>Вперед</span><kbd>→ / Space</kbd></div>
+        <div class="hotkey"><span>Назад</span><kbd>← / Shift+Space</kbd></div>
+        <div class="hotkey"><span>Первый / последний</span><kbd>Home / End</kbd></div>
+        <div class="hotkey"><span>Обзор</span><kbd>O / Esc</kbd></div>
+        <div class="hotkey"><span>Заметки</span><kbd>P</kbd></div>
+        <div class="hotkey"><span>Меньше анимации</span><kbd>M</kbd></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="overview" role="dialog" aria-modal="true" aria-label="Обзор слайдов">
+    <div class="panel">
+      <h3>Обзор слайдов</h3>
+      <div class="overview-grid" id="overview-grid"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="notes" role="dialog" aria-modal="true" aria-label="Заметки спикера">
+    <div class="panel">
+      <h3>Заметки спикера</h3>
+      <div class="notes-text" id="notes-text"></div>
+    </div>
+  </div>
+
+  <script>
+    /* eslint-disable */
+    {{DECK_NAVIGATION_JS}}
+    /* eslint-enable */
+  </script>
+</body>
+</html>

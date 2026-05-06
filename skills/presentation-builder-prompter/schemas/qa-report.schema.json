@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qa-report.schema.json",
+  "title": "QAReport",
+  "type": "object",
+  "required": ["passed"],
+  "properties": {
+    "passed": { "type": "boolean" },
+    "narrative": { "type": "array", "items": { "type": "object" }, "default": [] },
+    "layout": { "type": "array", "items": { "type": "object" }, "default": [] },
+    "responsive": { "type": "array", "items": { "type": "object" }, "default": [] },
+    "geometry_audit": {
+      "type": "object",
+      "properties": {
+        "passed": { "type": "boolean" },
+        "method": { "type": "string" },
+        "viewports": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "coordinate_deltas": { "type": "object", "additionalProperties": true },
+        "horizontal_overflow": { "type": "boolean" },
+        "controls_overlap_standard_layer": { "type": "boolean" },
+        "internal_scroll_slides": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "report": { "type": "string" },
+        "raw_report": { "type": "string" }
+      },
+      "additionalProperties": true,
+      "default": {}
+    },
+    "accessibility": { "type": "array", "items": { "type": "object" }, "default": [] },
+    "composition_findings": { "type": "array", "items": { "type": "object" }, "default": [] },
+    "screenshots": { "type": "array", "items": { "type": "string" }, "default": [] }
+  },
+  "additionalProperties": true
+}

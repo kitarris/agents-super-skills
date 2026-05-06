@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "slide-spec.schema.json",
+  "title": "SlideSpec",
+  "type": "object",
+  "required": ["index", "role", "claim_title", "component", "layout_contract", "qa_checks"],
+  "properties": {
+    "index": { "type": "integer", "minimum": 1 },
+    "role": {
+      "type": "string",
+      "enum": [
+        "Title / Promise",
+        "Tension / Why It Matters",
+        "Framework / Mental Model",
+        "Evidence / Data",
+        "Contrast / Before-After",
+        "Mechanism / How It Works",
+        "Practice / What To Do",
+        "Key Insight",
+        "CTA / Next Step",
+        "Sources / Backup"
+      ]
+    },
+    "claim_title": { "type": "string", "minLength": 1 },
+    "support_text": { "type": "string" },
+    "content_blocks": { "type": "array", "items": { "type": "object" }, "default": [] },
+    "proof_object": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["chart", "diagram", "comparison", "cards", "visual_anchor", "pause", "source_list", "metric", "demo"]
+        },
+        "message": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "component": { "type": "string" },
+    "layout_contract": { "type": "string" },
+    "geometry_role": {
+      "type": "string",
+      "enum": ["standard", "title_visual", "data", "source_backup", "pause"],
+      "default": "standard"
+    },
+    "slot_map": {
+      "type": "object",
+      "description": "Maps semantic content into the shared deck frame slots.",
+      "properties": {
+        "title": { "type": "string", "default": "title_slot" },
+        "support": { "type": "string", "default": "support_slot" },
+        "primary_visual": { "type": "string", "default": "content_zone" },
+        "sources": { "type": "string", "default": "content_zone" }
+      },
+      "additionalProperties": true
+    },
+    "scroll_policy": {
+      "type": "string",
+      "enum": ["none", "content-zone", "document"],
+      "default": "none"
+    },
+    "interaction": {
+      "type": "string",
+      "enum": ["none", "progressive_disclosure", "slider", "timeline", "3d_rotation", "data_toggle"],
+      "default": "none"
+    },
+    "source": { "type": "string" },
+    "qa_checks": { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+  },
+  "additionalProperties": true
+}

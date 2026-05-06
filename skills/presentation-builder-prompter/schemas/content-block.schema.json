@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "content-block.schema.json",
+  "title": "ContentBlock",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": ["block_type", "text"],
+      "properties": {
+        "block_type": { "const": "ClaimTitle" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 110 },
+        "role": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    {
+      "type": "object",
+      "required": ["block_type", "text"],
+      "properties": {
+        "block_type": { "const": "SupportText" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "tone": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    {
+      "type": "object",
+      "required": ["block_type", "text"],
+      "properties": {
+        "block_type": { "const": "CaveatNote" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 320 },
+        "severity": { "type": "string", "enum": ["quiet", "caution", "legal", "medical"] },
+        "accent": { "type": "string", "enum": ["amber", "neutral"] }
+      },
+      "additionalProperties": true
+    },
+    {
+      "type": "object",
+      "required": ["block_type", "type", "message"],
+      "properties": {
+        "block_type": { "const": "ProofSignal" },
+        "type": {
+          "type": "string",
+          "enum": ["metric", "chart", "comparison", "diagram", "image", "demo", "quote", "cards", "pause", "source_list"]
+        },
+        "message": { "type": "string", "minLength": 1 },
+        "highlight": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    {
+      "type": "object",
+      "required": ["block_type", "label", "value", "unit", "source_id"],
+      "properties": {
+        "block_type": { "const": "Metric" },
+        "label": { "type": "string" },
+        "value": { "type": "string" },
+        "unit": { "type": "string" },
+        "source_id": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    {
+      "type": "object",
+      "required": ["block_type", "label"],
+      "properties": {
+        "block_type": { "const": "DataSource" },
+        "label": { "type": "string" },
+        "url": { "type": "string" },
+        "trust_level": { "type": "string", "enum": ["official", "primary", "secondary", "sample"] },
+        "date_accessed": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    {
+      "type": "object",
+      "required": ["block_type", "action"],
+      "properties": {
+        "block_type": { "const": "CTA" },
+        "action": { "type": "string" },
+        "timeframe": { "type": "string" },
+        "success_criterion": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "component.schema.json",
+  "title": "ComponentSpec",
+  "type": "object",
+  "required": ["name", "role", "accepts_blocks", "layout_contract", "qa_metrics"],
+  "properties": {
+    "name": { "type": "string" },
+    "role": { "type": "string" },
+    "accepts_blocks": { "type": "array", "items": { "type": "string" } },
+    "layout_contract": { "type": "string" },
+    "desktop_grid": { "type": "string" },
+    "mobile_order": { "type": "array", "items": { "type": "string" } },
+    "slot_map": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "support": { "type": "string" },
+        "content": { "type": "string" },
+        "source": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "scroll_policy": {
+      "type": "string",
+      "enum": ["none", "content-zone", "document"],
+      "default": "none"
+    },
+    "forbidden_children": { "type": "array", "items": { "type": "string" } },
+    "qa_metrics": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "deck-brief.schema.json",
+  "title": "DeckBrief",
+  "type": "object",
+  "required": ["topic"],
+  "properties": {
+    "topic": { "type": "string", "minLength": 1 },
+    "audience": { "type": "string", "default": "широкая аудитория" },
+    "goal": { "type": "string", "default": "объяснить тему и дать практический следующий шаг" },
+    "duration_minutes": { "type": "number", "minimum": 1, "default": 10 },
+    "format": {
+      "type": "string",
+      "enum": ["live", "async", "screen-share", "kiosk"],
+      "default": "screen-share"
+    },
+    "tone": { "type": "string", "default": "ясный, доказательный, спокойный" },
+    "must_include": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "sources": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "constraints": { "type": "array", "items": { "type": "string" }, "default": [] }
+  },
+  "additionalProperties": true
+}

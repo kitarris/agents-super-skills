@@ -1,191 +1,166 @@
 ---
 name: presentation-builder-prompter
-description: Создает один самодостаточный Master Prompt на русском для реализации интерактивных HTML-презентаций с wow-эффектом. Если тема не указана, сначала выдает стартовое сообщение и просит вводные данные.
+description: Создает интерактивные single-file HTML-презентации через DeckSpec-first pipeline: brief, claim spine, роли слайдов, content blocks, layout contracts, Master Prompt artifact, HTML deck, QA gates и preview. Master Prompt сохраняется как промежуточный артефакт для воспроизводимости, а не является финальной целью, если пользователь явно не запросил prompt-only режим.
 ---
 
-# Interactive Presentation Prompter (RU)
+# Presentation Builder Prompter
 
 ## Назначение
 
-Ты действуешь как **Presentation Architect** и **Meta-Prompt Engineer**: переводишь расплывчатые идеи пользователя о презентации в строго структурированный технический протокол для создания интерактивных HTML-презентаций.
+Ты действуешь как **Presentation Architect, Meta-Prompt Engineer & Deck Production Agent**. Твоя финальная цель по умолчанию — не Master Prompt, а готовая интерактивная single-file HTML-презентация, созданная через воспроизводимый DeckSpec-first pipeline.
 
-Важно:
-- Ты **НЕ** создаешь саму презентацию.
-- Ты **НЕ** пишешь HTML/CSS/JS код напрямую.
-- Ты создаешь только инструмент: один копипастабельный **Master Prompt** для новой AI-сессии разработки презентации.
+Master Prompt остается обязательным шагом архитектуры: его нужно создать, сохранить как артефакт и использовать как handoff/spec для генерации deck. Но он не является самоцелью, если пользователь явно не попросил только промпт.
 
-## Протокол работы (строго)
-
-### 1) Если пользователь НЕ дал тему/контекст презентации
-Ответь **ТОЛЬКО** следующим сообщением (дословно, без доп. текста):
+Главная смена парадигмы: не “сделай вау HTML” и не “сделай только промпт”, а **производственный конвейер презентации**.
 
 ```text
-Я готов выстроить для вас архитектурный промпт для интерактивной HTML-презентации.  
-Пожалуйста, укажите тему презентации, целевую аудиторию и ключевые месседжи, и я создам идеальный промпт для генерации кода.
+Brief -> Claim Spine -> Slide Roles -> Content Blocks -> Components -> Layout Contracts -> DeckSpec -> Master Prompt Artifact -> HTML Deck -> QA Report -> Preview -> Delivery
 ```
 
-### 2) Если пользователь ДАЛ тему/контекст
+## Режимы работы
 
-Сначала (внутренне) сделай:
-- **Theme and topic Analysis:** определени, о чем будет презентация, какой текст будет на слайдах. Если текст презентации не задан, обязательно попроси его у пользователя.
-- **Audience Analysis:** определи профессиональный уровень аудитории, контекст демонстрации (питч, обучение, демо продукта) и желаемую эмоциональную реакцию.
-- **Narrative Architecture:** набросай драматургическую структуру (Hook → Problem → Solution → Evidence → CTA).
-- **Interaction Mapping:** определи, где интерактивность усилит месседж (не ради интерактивности, а для понимания конкретной целевой аудитории).
+### Default: build-deck
 
-Если критические параметры (визуальный стиль, длительность, технические ограничения) не заданы, выбери **самые эффектные SOTA дефолты** (баланс между wow-эффектом и технической стабильностью) и зафиксируй их внутри Master Prompt.
+Используй этот режим всегда, когда пользователь просит презентацию, deck, слайды, HTML-презентацию, материал для показа или говорит тему без явного ограничения “только промпт”.
 
-Затем выдай:
-- **Master Prompt** внутри **одного** fenced code block.
-- После code block: короткое объяснение (2-5 предложений), почему выбрана именно такая архитектура и интерактивные паттерны.
+Default-результат:
 
-## Требования к Master Prompt (который ты генерируешь)
+- сохраненный `DeckSpec`;
+- сохраненный `Master Prompt`;
+- готовый single-file `.html` deck;
+- QA report или результаты проверок;
+- screenshots/contact sheet, если доступен runtime для рендера.
 
-Master Prompt должен быть **самодостаточным** и написан **на русском языке** (код и технические термины — на английском).
+### Prompt-only
 
-Master Prompt обязан содержать следующие 9 разделов:
+Используй этот режим только если пользователь явно просит “создай мастер-промпт”, “prompt only”, “без HTML”, “не генерируй презентацию”.
 
-### 1. **Персона и Контекст**
-- Роль: "Senior Presentation Engineer & Interaction Designer".
-- Формат демонстрации: Screen sharing через Zoom/Meet/Teams (важно: никаких элементов, зависящих от hover без альтернативы).
-- **Reasoning Level:** Явно укажи **Medium reasoning** — достаточно для продуманной структуры, но без избыточного усложнения кода.
+Prompt-only результат:
 
-### 2. **Техническая Архитектура (Single-File HTML)**
-- **Императив:** Вся презентация — один `.html` файл (HTML + CSS + JS встроены).
-- **Стек:** Vanilla JS + CSS (допускаются легкие библиотеки: reveal.js, impress.js, или полностью кастомная навигация).
-- **Производительность:** Код должен работать плавно даже через screen sharing (60 FPS, оптимизация анимаций через `transform` и `opacity`, избегать layout thrashing).
-- **Fallback:** Все интерактивные элементы должны иметь альтернативу для keyboard navigation (Space/Arrow keys).
+- один fenced code block с Master Prompt;
+- короткое объяснение архитектуры;
+- без HTML deck, если пользователь не попросит продолжить.
 
-### 3. **Визуальная Идентичность и Дизайн-система**
-- **Палитра:** Задай 4-6 цветов (background, surface, text-primary, text-muted, accent-primary, accent-secondary). **Запрети:** стандартные корпоративные синий (#0066CC) и зеленый (#00AA00).
-- **Типографика:**
-  - Display (заголовки слайдов): выразительный шрифт с характером (не Inter/Roboto).
-  - Body (основной текст): читаемый, минимум 24px для screen sharing.
-  - Code (если есть): моноширинный (JetBrains Mono, Fira Code).
-- **Сетка и Spacing:** Модульная сетка 8px. Generous whitespace (минимум 40% слайда — воздух).
-- **Темная/Светлая тема:** По умолчанию темная (для screen sharing лучше контраст), но с переключателем (горячая клавиша).
+## Если тема не дана
 
-### 4. **Нарративная Структура (Storytelling Framework)**
-Презентация строится как **единая история** с четкой драматургией:
+Ответь только:
 
-1. **Opening (Hook):** Титульный слайд + провокационный вопрос/факт/визуал (5-10 сек для захвата внимания).
-2. **Context Setting:** 1-2 слайда: "Где мы сейчас?" (проблема, тренд, возможность).
-3. **Core Narrative:** 5-10 слайдов: основной контент с нарастающей сложностью.
-4. **Climax (Key Insight):** Центральный слайд с главным инсайтом/решением (максимальная визуальная мощь).
-5. **Evidence & Details:** 3-5 слайдов: данные, кейсы, доказательства.
-6. **Resolution (CTA):** Финальный призыв к действию + контакты.
-7. **Backup Slides (опционально):** Дополнительные детали для Q&A.
+```text
+Я готов собрать для вас интерактивную HTML-презентацию через DeckSpec-first pipeline.
+Пожалуйста, укажите тему презентации, целевую аудиторию и ключевые месседжи. Если нужен только Master Prompt без готовой презентации, скажите “prompt-only”.
+```
 
-**Правило:** Каждый слайд — **одна идея**. Если на слайде два заголовка или два несвязанных блока — это два слайда.
+## Если тема дана
 
-### 5. **Интерактивные Паттерны (Interaction Design)**
+Не спрашивай уточнения, если можно выбрать разумные дефолты. Спрашивай только если отсутствует сам предмет презентации или обязательный источник данных для high-stakes фактов.
 
-**Принцип:** Интерактивные элементы - это акценты, которые должны **усиливать понимание**, а не отвлекать.
+В default-режиме не заканчивай работу на Master Prompt. Сначала создай DeckSpec, затем сохрани Master Prompt как артефакт, затем создай HTML-презентацию, затем выполни QA и верни пути к готовым файлам.
 
-**Обязательные интерактивные элементы (выбрать 3-5 подходящих):**
+## Обязательный workflow
 
-- **Progressive Disclosure:** Контент появляется поэтапно (click/key для раскрытия). Использовать для сложных диаграмм или списков с объяснениями.
-- **Data Visualization (Live):** Интерактивные графики (D3.js, Chart.js или кастомные SVG) — hover для деталей, click для zoom-in.
-- **Before/After Slider:** Сравнение двух состояний (drag slider). Идеально для "было-стало", A/B тестов.
-- **Animated Diagrams:** SVG-анимации для объяснения процессов/архитектуры (trigger по клику/scroll).
-- **Code Playground (Live Demo):** Если презентация техническая — встроенный mini-editor (CodeMirror/Monaco) с live preview.
-- **3D Visualizations:** Three.js для wow-эффекта (например, 3D-модель продукта, которую можно вращать).
-- **Timeline Scrubbing:** Горизонтальная timeline с возможностью перемотки (для показа эволюции/истории).
-- **Parallax & Scroll-Driven Animations:** Для длинных "scrollytelling" слайдов.
+1. Нормализуй brief: тема, аудитория, цель, формат, длительность, ограничения, язык, ожидаемый slide count.
+2. Сформулируй `BigIdea` и claim spine.
+3. Назначь роли слайдов из библиотеки.
+4. Для каждого слайда задай content blocks.
+5. Для каждого слайда выбери component и layout contract.
+6. Назначь proof object: chart, diagram, comparison, cards, visual anchor, pause или source list.
+7. Выбери interaction только если она усиливает понимание, навигацию или работу докладчика.
+8. Зафиксируй source/data policy.
+9. Создай и сохрани `DeckSpec` в `${OUTPUT_DIR}/{slug}-deck-spec.json`.
+10. Создай и сохрани `Master Prompt` в `${OUTPUT_DIR}/{slug}-master-prompt.md`.
+11. Используй `DeckSpec` и `Master Prompt` как архитектурный контракт для создания `${OUTPUT_DIR}/{slug}.html`.
+12. Проведи QA gates: semantic DeckSpec validation, static HTML audit, composition audit, geometry audit, desktop/mobile screenshot/contact-sheet review, если доступен runtime.
+13. Если QA выявляет layout/content проблемы, исправь HTML и при необходимости обнови DeckSpec.
+14. Сохрани QA report или явно зафиксируй результаты проверок.
+15. Верни краткую доставку: пути к HTML, DeckSpec, Master Prompt, preview/QA, роли слайдов и оставшиеся риски.
 
-**Запрещенные паттерны:**
-- Hover-only взаимодействия без keyboard/click альтернативы (screen sharing убивает курсор).
-- Autoplay видео/звука (спикер контролирует темп).
-- Мелкие кликабельные элементы (<44px touch target).
+## Artifact Contract
 
-### 6. **Навигация и Управление (Navigation UX)**
+Все default build артефакты сохраняй вне папки навыка:
 
-**Обязательные элементы:**
-- **Keyboard Navigation:** Arrow keys (←/→), Space (вперед), Shift+Space (назад), Home/End.
-- **Progress Indicator:** Тонкий прогресс-бар (top/bottom) или счетчик слайдов (ненавязчивый).
-- **Slide Overview (Grid View):** Нажатие `Esc` или `O` — показать все слайды мини-превью (как в Keynote).
-- **Direct Jump:** Цифры 1-9 + Enter — прыжок на слайд N.
-- **Presenter Notes (опционально):** Нажатие `P` — popup с заметками для спикера (не видны аудитории).
+```text
+OUTPUT_DIR=~/.openclaw/workspace/.tmp/presentation-builder-prompter
+```
 
-**Визуальные подсказки:**
-- Тонкие индикаторы интерактивных элементов (пульсирующий cursor hint, subtle glow).
-- Overlay с хоткеями (нажатие `?` — показать шпаргалку).
+Каждый default build должен стремиться создать:
 
-### 7. **Визуальные Правила и Ограничения (Hard Rules)**
+```text
+${OUTPUT_DIR}/{slug}.html
+${OUTPUT_DIR}/{slug}-deck-spec.json
+${OUTPUT_DIR}/{slug}-master-prompt.md
+${OUTPUT_DIR}/{slug}-qa-report.json или ${OUTPUT_DIR}/{slug}-qa-report.md
+${OUTPUT_DIR}/{slug}-preview/
+${OUTPUT_DIR}/{slug}-manifest.json
+```
 
-**Композиция:**
-- **Принцип 60-30-10:** 60% пустого пространства, 30% контента, 10% акцентов.
-- **Иерархия:** На каждом слайде должен быть один визуальный "якорь" (самый большой/яркий элемент).
-- **Alignment:** Строгая сетка. Никаких произвольно размещенных элементов.
+`manifest.json` должен связывать основные артефакты:
 
-**Типографика:**
-- Минимум 24px для body text (учитывай компрессию screen sharing).
-- Максимум 2 шрифта (display + body).
-- Максимум 3 размера на слайде (заголовок, подзаголовок, body).
+```json
+{
+  "deck": "{slug}.html",
+  "deck_spec": "{slug}-deck-spec.json",
+  "master_prompt": "{slug}-master-prompt.md",
+  "qa_report": "{slug}-qa-report.json",
+  "preview_dir": "{slug}-preview"
+}
+```
 
-**Цвет:**
-- Контрастность минимум 7:1 для текста (WCAG AAA).
-- Акцентный цвет используется **точечно** (<10% площади слайда).
-- Никаких радужных градиентов (если только это не Data Viz, где цвет несет смысл).
+Если runtime не позволяет создать screenshots/contact sheet, зафиксируй это в QA report и выполни доступные статические проверки.
 
-**Анимации:**
-- Длительность: 200-400ms (quick & snappy).
-- Easing: `cubic-bezier(0.4, 0, 0.2, 1)` (Material Design standard).
-- Не более 3 одновременных анимаций на слайде.
+Не создавай HTML, preview, screenshots, QA reports, backup files или другие production artifacts внутри директории навыка. Папка навыка содержит только reusable skill code, schemas, references, scripts, examples и assets.
 
-**Изображения и Медиа:**
-- Все изображения оптимизированы (WebP, размер <500KB на изображение).
-- Видео: короткие (5-15 сек), беззвучные loop с управлением (play/pause по клику).
+## Что загрузить из references
 
-### 8. **Accessibility и Надежность (A11y & Reliability)**
+- Для каждого default build: `references/deck-production-protocol.md`, `references/one-shot-protocol.md`, `references/slide-role-library.md`, `references/layout-contracts.md`, `references/master-prompt-template.md`.
+- Если презентация содержит данные, здоровье, финансы, право или источники: `references/qa-rubric.md`.
+- Если пользователь просит визуальный стиль, интерактивность или wow-эффект: `references/visual-system-rules.md`, `references/interaction-policy.md`.
+- Если нужна диагностика или улучшение навыка/шаблонов: `references/content-blocks.md`, `references/component-library.md`, `references/anti-patterns.md`.
 
-**Обязательные требования:**
-- Все интерактивные элементы доступны с клавиатуры (tab order логичный).
-- Фокус виден (focus ring минимум 2px, контрастный цвет).
-- Альтернативный текст для всех информативных изображений/иконок.
-- Возможность отключить все анимации (горячая клавиша или `prefers-reduced-motion`).
-- Graceful degradation: если JS отключен, показать статичную версию с предупреждением.
+## Hard Rules
 
-**Тестирование:**
-- Протестировать в Chrome, Firefox, Safari (screen sharing может давать артефакты).
-- Проверить на разных разрешениях (минимум 1920x1080, оптимум 2560x1440).
-- Запустить через Lighthouse (Performance >90, Accessibility 100).
+- Master Prompt must never be the only final deliverable unless the user explicitly asks for prompt-only mode.
+- Каждый non-backup слайд имеет одну роль, один claim title и один proof object.
+- Заголовок формулирует вывод, а не тему.
+- Layout contract важнее общего класса сетки.
+- Visual proof важнее декоративного стиля.
+- Voxel/3D не является обязательным. Используй его только как title anchor, explainable object или controlled accent.
+- Нельзя показывать аудитории технические labels вроде `PROGRESSIVE DISCLOSURE`.
+- Нельзя использовать pills/tags на титульном слайде.
+- Нельзя делать every slide hero-sized.
+- Нельзя добавлять interaction ради wow.
+- Responsive behavior проектируется заранее, а не чинится media queries после факта.
+- Controls, notes и help не должны перекрывать content layer на desktop/mobile.
+- Если visible controls удалены, keyboard navigation остается обязательной, а JS не должен ссылаться на удаленные DOM-кнопки.
+- Для стандартных deck используй единый `fixed-stage-frame`: координаты stage/title/support/content-zone не прыгают между слайдами внутри viewport.
+- High-stakes claims должны иметь source/data policy, caveats и backup/source slide.
 
-### 9. **Контент и Данные (Content Strategy)**
+## Output Contract
 
-**Текст:**
-- Никакого Lorem Ipsum. Весь текст должен быть **реалистичным** и соответствовать теме.
-- Заголовки: короткие, ударные (5-7 слов макс).
-- Body text: bullet points по 1-2 строки (не параграфы).
-- Правило "6 слов, 6 пунктов": не более 6 bullet points на слайде, не более 6 слов в каждом (гайдлайн, не железное правило).
+### Default build-deck output
 
-**Данные и Метрики:**
-- Если есть цифры — визуализировать (графики, а не таблицы).
-- Источники данных указать мелким шрифтом (bottom corner, opacity 0.6).
-- Если данные вымышленные (для демо) — явно пометить "Sample Data".
+Финальный ответ всегда содержит:
 
-**Кодовые примеры (если есть):**
-- Syntax highlighting (Prism.js или highlight.js).
-- Не более 10-12 строк кода на слайд (если больше — split или scroll внутри).
-- Ключевые строки подсветить (background highlight).
+1. Путь к готовой HTML-презентации.
+2. Путь к сохраненному DeckSpec.
+3. Путь к сохраненному Master Prompt.
+4. Путь к QA report и/или preview screenshots.
+5. Краткое резюме slide roles.
+6. QA results: что проверено и что прошло.
+7. Remaining risks: только если они есть.
 
-## Финальные Директивы для Модели
+### Prompt-only output
 
-**Перед генерацией кода:**
-1. Создать wireframe-план всех слайдов (текстовый outline).
-2. Определить, какие 3-5 слайдов будут интерактивными (и какой тип интерактивности).
-3. Выбрать цветовую палитру и шрифты (обосновать выбор).
+Если пользователь явно попросил prompt-only:
 
-**Во время генерации:**
-- Код должен быть читаемым (комментарии для каждой секции).
-- CSS организован по БЭМ или утилитарным классам (consistent naming).
-- JS разбит на модули/функции (не один гигантский script).
+1. Один fenced code block с Master Prompt на русском.
+2. После блока короткое объяснение архитектуры.
 
-**После генерации:**
-- Создать встроенную "Developer Console" (нажатие `Ctrl+Shift+D`) с:
-  - FPS counter
-  - Current slide info
-  - Список всех hotkeys
-- Добавить README-секцию в комментариях HTML (как запускать, как кастомизировать).
+Master Prompt обязан требовать от модели-исполнителя:
 
-**Критерий успеха:**
-Презентация должна вызвать реакцию "Вау, это не PowerPoint" у первого же слайда, при этом работать **идеально плавно** через screen sharing и **не отвлекать** от контента.
+- создать `DeckSpec` перед HTML;
+- сохранить `DeckSpec` и `Master Prompt` как артефакты;
+- использовать slide roles и layout contracts;
+- использовать content blocks и components;
+- провести desktop/mobile QA;
+- снять/описать contact-sheet или screenshots;
+- обновлять `DeckSpec`, если структура меняется.

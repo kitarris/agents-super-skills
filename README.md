@@ -11,6 +11,7 @@ The current collection contains prompt-oriented skills for AI agents and reusabl
 | `deep-research-prompter` | Generates a self-contained Russian master prompt for deep research workflows with explicit planning, evidence standards, and source hygiene. |
 | `frontend-design-prompter` | Generates a self-contained Russian master prompt for production-ready frontend design workflows based on GPT-5.4-oriented implementation guidelines. |
 | `presentation-builder-prompter` | Builds a DeckSpec-first presentation production skill for interactive single-file HTML decks, including reusable references, schemas, scripts, templates, QA gates, and a prompt-only fallback mode. |
+| `structured-summarizer` | Produces compact Russian 20/80 summaries with a fixed analytical structure and an optional YouTube transcript fetch step via a bundled helper script. |
 
 ## Included Frameworks
 
@@ -32,6 +33,9 @@ skills/
     schemas/
     scripts/
     assets/
+  structured-summarizer/
+    SKILL.md
+    scripts/
 frameworks/
   open-spec/
     README.md
